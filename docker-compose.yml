@@ -1,0 +1,30 @@
+---
+services:
+ checkmk:
+  image: checkmk/check-mk-raw:2.4.0-2026.01.31
+  container_name: ${container_name}
+  environment:
+    - PUID=${PUID}
+    - PGID=${PGID}
+    - TZ=${TZ}
+    - CMK_PASSWORD=${CMK_PASSWORD}
+    - CMK_SITE_ID=db
+    - CMK_LIVESTATUS_TCP=on
+  ports:
+    - ${IP}:${ext_httpport}:${int_httpport}
+    - ${IP}:${ext_httpsport}:${int_httpsport}
+    - ${IP}:${ext_man1port}:${int_man1port}
+    - ${IP}:${ext_man2port}:${ext_man2port}
+  tmpfs:
+    - /opt/omd/sites/cmk/tmp:uid=1000,gid=1000
+  volumes:
+    - sites:/omd/sites
+    - mibs:/omd/sites/cmk/local/share/check_mk/mibs
+    - backups:/omd/backups
+    - /usr/local/share/ca-certificates:/usr/local/share/ca-certificates:ro
+  restart: unless-stopped
+
+volumes:
+  sites:
+  mibs:
+  backups:

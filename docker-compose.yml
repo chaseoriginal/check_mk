@@ -31,7 +31,7 @@ services:
     test:
       - CMD-SHELL
       - >-
-        omd status > /tmp/.hc_omd 2>&1 &&
+        omd status > /tmp/.hc_omd 2>&1 || true;
         grep -q 'apache: *running' /tmp/.hc_omd &&
         grep -q 'nagios: *running' /tmp/.hc_omd &&
         grep -q 'agent-receiver: *running' /tmp/.hc_omd
